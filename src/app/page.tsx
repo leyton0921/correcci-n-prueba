@@ -1,6 +1,6 @@
 'use client'
 import Link from "next/link";
-import NavBar from "@/components/IU/nav/page";
+import NavBar from "@/components/Nav/Nav";
 
 export default function Home() {
 
