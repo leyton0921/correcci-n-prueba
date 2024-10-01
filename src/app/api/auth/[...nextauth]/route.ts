@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { NextApiRequest, NextApiResponse } from "next";
 
 interface IUser {
   id: string;
@@ -20,17 +21,38 @@ const authenticateUser = async (email: string, password: string): Promise<IUser 
 
     const data = await response.json();
 
-    console.log('API Response:', data);
-
     if (response.ok) {
-      const { user } = data; 
-      return { id: user.id, name: user.name, email: user.email,language: user.language };
+      const { user } = data;
+      return { id: user.id, name: user.name, email: user.email, language: user.language };
     } else {
-      console.error('Authentication failed:', data.message);
-      return null;
+      throw new Error(data.message || "Invalid email or password");
     }
   } catch (error) {
     console.error('Error authenticating user:', error);
+    return null;
+  }
+};
+
+const registerUser = async (name: string, email: string, password: string): Promise<IUser | null> => {
+  try {
+    const response = await fetch('https://simuate-test-backend-1.onrender.com/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, password }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      const { user } = data;
+      return { id: user.id, name: user.name, email: user.email, language: user.language };
+    } else {
+      throw new Error(data.message || "Error registering user");
+    }
+  } catch (error) {
+    console.error('Error registering user:', error);
     return null;
   }
 };
@@ -66,7 +88,7 @@ const handler = NextAuth({
         token.id = user.id;
         token.name = user.name;
         token.email = user.email;
-        token.language = user.language;
+        // token.language = user.language;
       }
       return token;
     },
@@ -87,4 +109,19 @@ const handler = NextAuth({
   },
 });
 
-export { handler as GET, handler as POST };
+const registerHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method === 'POST') {
+    const { name, email, password } = req.body;
+    const user = await registerUser(name, email, password);
+    if (user) {
+      res.status(201).json({ user });
+    } else {
+      res.status(400).json({ message: "Error registering user" });
+    }
+  } else {
+    res.setHeader('Allow', ['POST']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+};
+
+export { handler as GET, handler as POST, registerHandler as register };

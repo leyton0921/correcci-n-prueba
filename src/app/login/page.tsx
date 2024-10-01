@@ -2,6 +2,8 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { IoHomeOutline } from "react-icons/io5";
 
 export default function LoginPage() {
 
@@ -15,7 +17,7 @@ export default function LoginPage() {
   useEffect(() => {
     console.log({ status: status, session })
     if (status === "authenticated") {
-      router.push("/");
+      router.push("/posts");
     }
   }, [status, session]);
 
@@ -32,12 +34,11 @@ export default function LoginPage() {
     if (result?.error) {
       setError(result.error);
     } else {
-      // redirect to loggedPage
       router.push("/");
     }
   };
 
- 
+
 
 
   return (
@@ -49,6 +50,7 @@ export default function LoginPage() {
 
       {status === "unauthenticated" && (
         <div>
+          <Link href="/"><IoHomeOutline /></Link>
           <h3>Login</h3>
           <form
             onSubmit={(e) => {
@@ -77,9 +79,8 @@ export default function LoginPage() {
               />
             </div>
             <button type="submit">Sign</button>
+            <Link href="/register">register</Link>
           </form>
-
-          {/* Mostrar error si lo hay */}
           {error && <p style={{ color: "red" }}>{error}</p>}
         </div>
       )}
