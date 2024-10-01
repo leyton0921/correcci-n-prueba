@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styled from "styled-components";
+import { useSession, signOut } from "next-auth/react";
 
 const NavBarContainer = styled.nav`
   display: flex;
@@ -7,7 +8,7 @@ const NavBarContainer = styled.nav`
   align-items: center;
   padding: 10px 20px;
   background-color: #fff;
-border-bottom: 1px solid #a7a7a7;
+  border-bottom: 1px solid #a7a7a7;
 `;
 
 const Logo = styled.h1`
@@ -37,23 +38,38 @@ const StyledLink = styled(Link)`
   &.register {
     background-color: #000;
     color: #fff;
+  }
 
+  &.singOut{
+    background-color: #000;
+    color: #fff;
   }
 `;
 
-
 const NavBar = () => {
-    return (
-        <NavBarContainer>
-            <Logo>BlogPost</Logo>
-            <NavLinks>
-                <StyledLink href="/login">Iniciar sesión</StyledLink>
-                <StyledLink href="/register" className="register">
-                    Registrarse
-                </StyledLink>
-            </NavLinks>
-        </NavBarContainer>
-    );
+  const { data: session } = useSession();
+
+  return (
+    <NavBarContainer>
+      <Logo>BlogPost</Logo>
+      <NavLinks>
+        {session ? (
+          <>
+            <span>{session.user.name}</span>
+            <StyledLink href="/profile">Perfil</StyledLink>
+            <StyledLink href="#" onClick={() => signOut()} className="singOut">Cerrar sesión</StyledLink>
+          </>
+        ) : (
+          <>
+            <StyledLink href="/login">Iniciar sesión</StyledLink>
+            <StyledLink href="/register" className="register">
+              Registrarse
+            </StyledLink>
+          </>
+        )}
+      </NavLinks>
+    </NavBarContainer>
+  );
 };
 
 export default NavBar;

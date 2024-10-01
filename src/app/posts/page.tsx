@@ -3,6 +3,8 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Post } from "@/interface/interfaces";
+import NavBar from "@/components/Nav/Nav";
+import Button from "@/components/IU/Button/Button";
 
 export default function HomePosts() {
   const router = useRouter();
@@ -29,15 +31,10 @@ export default function HomePosts() {
     fetchPosts();
   }, []);
 
-  const handleSignOut = async () => {
-    await signOut({ redirect: false });
-    router.push("/login");
-  };
 
   const handleCreatePost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Verificar que session no sea null antes de acceder a sus propiedades
+
     if (!session) {
       console.error("No session found");
       return;
@@ -63,47 +60,34 @@ export default function HomePosts() {
 
   return (
     <div>
-      <h3>Posts</h3>
+      <NavBar />
+      <Button>
+      onClick = mostrarForm()
+      label={`Quieres publicar algo hoy ${session?.user.name}`}
+      </Button>
       {status === "authenticated" && (
         <div>
-          <p>User Logged: {session.user.email}</p>
-          <button onClick={handleSignOut}>Sign Out</button>
+   
+
+          <div>
+            <h4>All Posts</h4>
+            {posts.length > 0 ? (
+              <ul>
+                {posts.map(post => (
+                  <li key={post.id}>
+                    <h5>{post.title}</h5>
+                    <p>{post.description}</p>
+                    <p>User ID: {post.user_id}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No posts available.</p>
+            )}
+          </div>
         </div>
       )}
 
-      <form onSubmit={handleCreatePost}>
-        <input 
-          type="text" 
-          placeholder="Title" 
-          value={title} 
-          onChange={(e) => setTitle(e.target.value)} 
-          required 
-        />
-        <textarea 
-          placeholder="Description" 
-          value={description} 
-          onChange={(e) => setDescription(e.target.value)} 
-          required 
-        />
-        <button type="submit">Create Post</button>
-      </form>
-
-      <div>
-        <h4>All Posts</h4>
-        {posts.length > 0 ? (
-          <ul>
-            {posts.map(post => (
-              <li key={post.id}>
-                <h5>{post.title}</h5>
-                <p>{post.description}</p>
-                <p>User ID: {post.user_id}</p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No posts available.</p>
-        )}
-      </div>
     </div>
   );
 }
