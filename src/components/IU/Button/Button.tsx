@@ -1,7 +1,12 @@
 import React from "react";
+import styled from "styled-components";
 
+const StyledButton = styled.button`
+  font-family: "Prompt", sans-serif;
+
+`;
 export interface IButtonProps {
-  label: string;
+  label: string | React.ReactNode;
   onClick?: () => void;
   className?: string;
   type?: "button" | "submit" | "reset";
@@ -10,9 +15,9 @@ export interface IButtonProps {
 
 const Button: React.FC<IButtonProps> = ({ onClick, label, className, type, disabled }) => {
   return (
-    <button type={type} onClick={onClick} className={className} disabled={disabled}>
+    <StyledButton type={type} onClick={onClick} className={className} disabled={disabled}>
       {label}
-    </button>
+    </StyledButton>
   );
 };
 

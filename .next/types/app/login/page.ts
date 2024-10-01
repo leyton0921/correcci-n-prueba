@@ -1,4 +1,4 @@
-// File: C:\Users\PC\Desktop\RIWI\auth-intl\src\app\login\page.tsx
+// File: C:\Users\PC\Desktop\RIWI\correcci-n-prueba\src\app\login\page.tsx
 import * as entry from '../../../../src/app/login/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

@@ -5,13 +5,83 @@ import { useEffect, useState } from "react";
 import { Post } from "@/interface/interfaces";
 import NavBar from "@/components/Nav/Nav";
 import Button from "@/components/IU/Button/Button";
+import styled from "styled-components";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import PostForm from "@/components/CreatePostForm/CreatePost";
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import CartForm from "@/components/CartsForm/CartForm";
+
+const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  width: 30%;
+  padding: 10px;
+  margin: 0 auto;
+  margin-top: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  justify-content: center;
+  color: #c5c2c2;
+
+  &:hover {
+    background: #e0e0e074;
+    cursor: pointer;
+  }
+
+
+`;
+
+const ButtonStyled = styled(Button)`
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-family: "Prompt", sans-serif;
+  text-align: center;
+  color: #c5c2c2;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.close{
+    background: none;
+    color: black;
+  }
+`;
+
+const Modal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000; 
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999; 
+`;
 
 export default function HomePosts() {
   const router = useRouter();
   const { status, data: session } = useSession();
   const [posts, setPosts] = useState<Post[]>([]);
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -19,75 +89,50 @@ export default function HomePosts() {
     }
   }, [status, router]);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await fetch('https://simuate-test-backend-1.onrender.com/api/posts');
-      const data = await response.json();
-      if (data.posts) {
-        setPosts(data.posts);
-      }
-    };
 
-    fetchPosts();
-  }, []);
-
-
-  const handleCreatePost = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!session) {
-      console.error("No session found");
-      return;
-    }
-
-    const response = await fetch('https://simuate-test-backend-1.onrender.com/api/posts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ title, description, user_id: session.user.id }), // Asegúrate de tener el user_id correcto
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-      setPosts([...posts, data.post]);
-      setTitle("");
-      setDescription("");
-    } else {
-      console.error(data.message);
-    }
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
   };
 
-  return (
-    <div>
-      <NavBar />
-      <Button>
-      onClick = mostrarForm()
-      label={`Quieres publicar algo hoy ${session?.user.name}`}
-      </Button>
-      {status === "authenticated" && (
-        <div>
-   
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
-          <div>
-            <h4>All Posts</h4>
-            {posts.length > 0 ? (
-              <ul>
-                {posts.map(post => (
-                  <li key={post.id}>
-                    <h5>{post.title}</h5>
-                    <p>{post.description}</p>
-                    <p>User ID: {post.user_id}</p>
-                  </li>
-                ))}
-              </ul>
+  const handlePostCreated = (newPost: Post) => {
+    setPosts((prevPosts) => [...prevPosts, newPost]);
+    handleCloseModal();
+  };
+
+  const userId = session?.user.id ? Number(session.user.id) : undefined; 
+
+  return (
+    <Main>
+      <NavBar />
+      <Container onClick={handleOpenModal}>
+        <IoIosAddCircleOutline />
+        <ButtonStyled label={`Deseas publicar algo nuevo, ${session?.user.name}?`} />
+      </Container>
+
+      {isModalOpen && (
+        <>
+          <Overlay onClick={handleCloseModal} />
+          <Modal>
+          <ButtonStyled onClick={handleCloseModal} label={<IoIosCloseCircleOutline size={30}/>} className="close" />
+            <h2>Crear Nueva Publicación</h2>
+            {userId !== undefined ? (
+              <PostForm onPostCreated={handlePostCreated} userId={userId} />
             ) : (
-              <p>No posts available.</p>
+              <p>Error: No se pudo obtener el ID de usuario.</p>
             )}
-          </div>
-        </div>
+          </Modal>
+        </>
       )}
 
-    </div>
+      {status === "authenticated" && (
+        <div>
+          <CartForm/>
+        </div>
+      )}
+    </Main>
   );
 }
