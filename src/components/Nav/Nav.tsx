@@ -11,10 +11,12 @@ const NavBarContainer = styled.nav`
   border-bottom: 1px solid #a7a7a7;
 `;
 
-const Logo = styled.h1`
+const Logo = styled(Link)`
   font-size: 24px;
   font-weight: bold;
   margin: 0;
+  text-decoration: none;
+  color: black;
 `;
 
 const NavLinks = styled.div`
@@ -51,7 +53,7 @@ const NavBar = () => {
 
   return (
     <NavBarContainer>
-      <Logo>BlogPost</Logo>
+      <Logo href="/">BlogPost</Logo>
       <NavLinks>
         {session ? (
           <>
