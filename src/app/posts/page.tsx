@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import PostForm from "@/components/CreatePostForm/CreatePost";
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import CartForm from "@/components/CartsForm/CartForm";
+import CardForm from "@/components/CardsForm/CardForm";
 
 const Main = styled.div`
   display: flex;
@@ -130,7 +130,7 @@ export default function HomePosts() {
 
       {status === "authenticated" && (
         <div>
-          <CartForm/>
+          <CardForm/>
         </div>
       )}
     </Main>

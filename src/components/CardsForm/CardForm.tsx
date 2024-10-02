@@ -13,7 +13,7 @@ interface User {
   name: string;
 }
 
-const CartForm = () => {
+const CardForm = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [isEditing, setIsEditing] = useState<number | null>(null);
@@ -264,4 +264,4 @@ const CancelButton = styled(Button)`
   }
 `;
 
-export default CartForm;
+export default CardForm;

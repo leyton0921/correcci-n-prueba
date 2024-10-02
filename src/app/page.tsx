@@ -18,6 +18,7 @@ export default function Home() {
     <div>
       <NavBar />
       <h1>Bienvenido a BlogPost</h1>
+  
     
     </div>
   );
