@@ -49,11 +49,11 @@ const CardForm = () => {
   const handleEdit = (post: Post) => {
     setIsEditing(post.id);
     setEditPostData({ title: post.title, description: post.description, user_id: post.user_id });
-    setShowModal(true); // Show the modal
+    setShowModal(true);
   };
 
   const handleEditSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
     if (isEditing !== null) {
       try {
         const response = await fetch(`https://simuate-test-backend-1.onrender.com/api/posts/${isEditing}`, {
@@ -61,20 +61,14 @@ const CardForm = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            title: editPostData.title,
-            description: editPostData.description,
-            user_id: editPostData.user_id, // Include user_id as part of the body
-          }),
+          body: JSON.stringify(editPostData), // Asegúrate de que editPostData contenga los datos correctos
         });
 
-        const data = await response.json();
-
         if (response.ok) {
-          // Update the post in the state
           setPosts(posts.map((post) => (post.id === isEditing ? { ...post, ...editPostData } : post)));
-          setShowModal(false); // Close the modal
+          setShowModal(false);
         } else {
+          const data = await response.json();
           console.error('Failed to update the post:', data.message);
         }
       } catch (error) {
@@ -110,14 +104,8 @@ const CardForm = () => {
               <Author>Written by: {getUserNameById(post.user_id)}</Author>
             </div>
             <Actions>
-              <EditButton
-                label={<GrEdit size={24} />}
-                onClick={() => handleEdit(post)}
-              />
-              <DeleteButton
-                label={<RiDeleteBinLine size={24} />}
-                onClick={() => handleDelete(post.id)}
-              />
+              <EditButton label={<GrEdit size={24} />} onClick={() => handleEdit(post)} />
+              <DeleteButton label={<RiDeleteBinLine size={24} />} onClick={() => handleDelete(post.id)} />
             </Actions>
           </Card>
         ))
@@ -129,7 +117,7 @@ const CardForm = () => {
       {showModal && (
         <Modal>
           <ModalContent>
-          <CancelButton onClick={() => setShowModal(false)} label={<IoIosCloseCircleOutline size={30}/>} />
+            <CancelButton onClick={() => setShowModal(false)} label={<IoIosCloseCircleOutline size={30} />} />
             <h3>Edit Post</h3>
             <Form onSubmit={handleEditSubmit}>
               <Input
@@ -146,7 +134,6 @@ const CardForm = () => {
                 required
               />
               <StyledButton type="submit" label="Save Changes" />
-            
             </Form>
           </ModalContent>
         </Modal>
@@ -249,7 +236,7 @@ const StyledButton = styled(Button)`
   font-size: 16px;
   border: none;
 
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 `;
@@ -259,7 +246,7 @@ const CancelButton = styled(Button)`
   color: #000;
   border: none;
 
-  &:hover{
+  &:hover {
     cursor: pointer;
   }
 `;

@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import styled from "styled-components";
-import { GrEdit } from "react-icons/gr"; // Asegúrate de tener estos iconos instalados
+import { GrEdit } from "react-icons/gr";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 
-// Definición de la interfaz Post
 export interface Post {
   id: number;
   title: string;
@@ -13,7 +12,6 @@ export interface Post {
   user_id: number;
 }
 
-// Componente PostsUser
 const PostsUser = () => {
   const { data: session, status } = useSession();
   const [editedUser, setEditedUser] = useState<{ id: string; name: string; email: string; password: string } | null>(null);
@@ -37,9 +35,9 @@ const PostsUser = () => {
           if (data.posts) {
             const filteredPosts = data.posts.filter((post: Post) => post.user_id === Number(session.user.id));
             setUserPosts(filteredPosts);
-            console.log("Posts del usuario:", filteredPosts);
           }
         } catch (error) {
+          alert("Error al obtener los posts. Intenta de nuevo más tarde."); // Mejorar manejo de errores
           console.error("Error al obtener los posts:", error);
         }
       };
@@ -62,7 +60,7 @@ const PostsUser = () => {
       setUserPosts(userPosts.filter((post) => post.id !== postId));
       alert("Post eliminado con éxito.");
     } else {
-      alert("Error al eliminar el post.");
+      alert("Error al eliminar el post. Intenta de nuevo más tarde."); // Mejorar manejo de errores
     }
   };
 
@@ -84,7 +82,7 @@ const PostsUser = () => {
       alert("Post actualizado con éxito.");
       setShowModal(false);
     } else {
-      alert("Error al actualizar el post.");
+      alert("Error al actualizar el post. Intenta de nuevo más tarde."); // Mejorar manejo de errores
     }
   };
 
@@ -99,20 +97,19 @@ const PostsUser = () => {
               <Author>Written by: {editedUser?.name}</Author>
             </div>
             <Actions>
-              <EditButton onClick={() => handleEdit(post)}>
+              <EditButton onClick={() => handleEdit(post)} aria-label={`Edit ${post.title}`}>
                 <GrEdit size={24} />
               </EditButton>
-              <DeleteButton onClick={() => handleDelete(post.id)}>
+              <DeleteButton onClick={() => handleDelete(post.id)} aria-label={`Delete ${post.title}`}>
                 <RiDeleteBinLine size={24} />
               </DeleteButton>
             </Actions>
           </Card>
         ))
       ) : (
-        <p>No posts available.</p>
+        <p>No hay posts disponibles.</p>
       )}
 
-      {/* Edit Modal */}
       {showModal && editPostData && (
         <Modal>
           <ModalContent>
@@ -202,7 +199,6 @@ const DeleteButton = styled.button`
   }
 `;
 
-// Modal styles
 const Modal = styled.div`
   position: fixed;
   top: 0;

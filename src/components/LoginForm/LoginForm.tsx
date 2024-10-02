@@ -73,11 +73,10 @@ const LoginForm = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log({ status: status, session });
     if (status === "authenticated") {
       router.push("/posts");
     }
-  }, [status, session]);
+  }, [status, router]); // Se ha eliminado `session` de las dependencias ya que no se utiliza
 
   const handleSignIn = async () => {
     const result = await signIn("credentials", {
@@ -85,8 +84,6 @@ const LoginForm = () => {
       email,
       password,
     });
-
-    console.log({ result });
 
     if (result?.error) {
       setError(result.error);
@@ -111,6 +108,7 @@ const LoginForm = () => {
             <div>
               <Label htmlFor="email">Email:</Label>
               <Input
+            
                 type="email"
                 placeholder="your@email.com"
                 value={email}
@@ -121,6 +119,7 @@ const LoginForm = () => {
             <div>
               <Label htmlFor="password">Password:</Label>
               <Input
+           
                 type="password"
                 placeholder="Password"
                 value={password}
@@ -128,7 +127,7 @@ const LoginForm = () => {
                 required
               />
             </div>
-            <StyledButton type={"submit"} label={"Sign In"} />
+            <StyledButton type="submit" label="Sign In"></StyledButton>
             <p>
               Don't have an account? <StyledLink href="/register">Register</StyledLink>
             </p>
