@@ -58,14 +58,14 @@ const NavBar = () => {
         {session ? (
           <>
             <span>{session.user.name}</span>
-            <StyledLink href="/profile">Perfil</StyledLink>
-            <StyledLink href="#" onClick={() => signOut()} className="singOut">Cerrar sesión</StyledLink>
+            <StyledLink href="/profile">Profile</StyledLink>
+            <StyledLink href="#" onClick={() => signOut()} className="singOut">Log out</StyledLink>
           </>
         ) : (
           <>
-            <StyledLink href="/login">Iniciar sesión</StyledLink>
+            <StyledLink href="/login">sign in</StyledLink>
             <StyledLink href="/register" className="register">
-              Registrarse
+              Sign up
             </StyledLink>
           </>
         )}

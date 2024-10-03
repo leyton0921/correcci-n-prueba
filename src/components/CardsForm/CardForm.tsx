@@ -61,7 +61,7 @@ const CardForm = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(editPostData), // Asegúrate de que editPostData contenga los datos correctos
+          body: JSON.stringify(editPostData), 
         });
 
         if (response.ok) {

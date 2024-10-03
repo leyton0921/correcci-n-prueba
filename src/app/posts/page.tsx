@@ -110,7 +110,7 @@ export default function HomePosts() {
       <NavBar />
       <Container onClick={handleOpenModal}>
         <IoIosAddCircleOutline />
-        <ButtonStyled label={`Deseas publicar algo nuevo, ${session?.user.name}?`} />
+        <ButtonStyled label={`I would like to publish something new, ${session?.user.name}?`} />
       </Container>
 
       {isModalOpen && (

@@ -4,13 +4,8 @@ import styled from "styled-components";
 import { GrEdit } from "react-icons/gr";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { Post } from "@/interface/interfaces";
 
-export interface Post {
-  id: number;
-  title: string;
-  description: string;
-  user_id: number;
-}
 
 const PostsUser = () => {
   const { data: session, status } = useSession();
@@ -37,7 +32,7 @@ const PostsUser = () => {
             setUserPosts(filteredPosts);
           }
         } catch (error) {
-          alert("Error al obtener los posts. Intenta de nuevo más tarde."); // Mejorar manejo de errores
+          alert("Error al obtener los posts. Intenta de nuevo más tarde.");
           console.error("Error al obtener los posts:", error);
         }
       };
@@ -60,7 +55,7 @@ const PostsUser = () => {
       setUserPosts(userPosts.filter((post) => post.id !== postId));
       alert("Post eliminado con éxito.");
     } else {
-      alert("Error al eliminar el post. Intenta de nuevo más tarde."); // Mejorar manejo de errores
+      alert("Error al eliminar el post. Intenta de nuevo más tarde.");
     }
   };
 
@@ -82,7 +77,7 @@ const PostsUser = () => {
       alert("Post actualizado con éxito.");
       setShowModal(false);
     } else {
-      alert("Error al actualizar el post. Intenta de nuevo más tarde."); // Mejorar manejo de errores
+      alert("Error al actualizar el post. Intenta de nuevo más tarde."); 
     }
   };
 

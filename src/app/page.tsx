@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <div>
       <NavBar />
-      <h1>Bienvenido a BlogPost</h1>
+      <h1>Welcome to BlogPost</h1>
   
     
     </div>

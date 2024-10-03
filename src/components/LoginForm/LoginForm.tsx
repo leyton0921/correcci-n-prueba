@@ -76,7 +76,7 @@ const LoginForm = () => {
     if (status === "authenticated") {
       router.push("/posts");
     }
-  }, [status, router]); // Se ha eliminado `session` de las dependencias ya que no se utiliza
+  }, [status, router]); 
 
   const handleSignIn = async () => {
     const result = await signIn("credentials", {

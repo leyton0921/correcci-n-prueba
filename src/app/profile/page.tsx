@@ -177,8 +177,8 @@ const UserProfile: React.FC = () => {
           <Avatar ><CiUser size={90} /></Avatar>
           <Title>{editedUser?.name}</Title>
           <p>{editedUser?.email}</p>
-          <StyledButton onClick={handleOpenModal} label="Editar Perfil"/>
-          <StyledButton onClick={handleDeleteUser} label="Eliminar Usuario"/>
+          <StyledButton onClick={handleOpenModal} label="Edit profile"/>
+          <StyledButton onClick={handleDeleteUser} label="Delete user"/>
         </InfoContainer>
 
         {isModalOpen && (
@@ -186,9 +186,9 @@ const UserProfile: React.FC = () => {
             <Overlay onClick={handleCloseModal} />
             <Modal>
               <ButtonStyled onClick={handleCloseModal} label={<IoIosCloseCircleOutline size={30} />}/>
-              <h2>Editar Información del Perfil</h2>
+              <h2>Edit Profile Information</h2>
               <div>
-                <strong>Nombre:</strong>
+                <strong>Name:</strong>
                 <Input
                   type="text"
                   value={editedUser?.name || ""}
@@ -204,20 +204,20 @@ const UserProfile: React.FC = () => {
                 />
               </div>
               <div>
-                <strong>Contraseña:</strong>
+                <strong>Password:</strong>
                 <Input
                   type="password"
                   value={editedUser?.password || ""}
                   onChange={(e) => setEditedUser({ ...editedUser, password: e.target.value })}
                 />
               </div>
-              <StyledButton onClick={handleSaveProfile} label="Guardar Cambios"/>
+              <StyledButton onClick={handleSaveProfile} label="Save changes"/>
             </Modal>
           </>
         )}
 
         <PostContainer>
-          <h2>Mis Posts</h2>
+          <h2>My Posts</h2>
           <PostsUser />
         </PostContainer>
       </ProfileContainer>
